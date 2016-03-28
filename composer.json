@@ -1,0 +1,15 @@
+{
+    "name": "keekinc/s3-client",
+    "description": "A fork off of the S3 Client that supports V2 Signatures",
+    "license": "GPLv3+",
+    "authors": [
+        {
+            "name": "Keek, Inc.",
+            "homepage": "https://keek.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0"
+    }
+}
+

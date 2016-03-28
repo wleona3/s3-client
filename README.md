@@ -1,6 +1,8 @@
-# Akeeba Amazon S3 Connector
+# Keek's Amazon S3 Connector
 
 A lightweight Amazon S3 connector implementation for PHP 5.3 or later
+
+**Special Thanks To: ** [akeeba/s3](https://github.com/akeeba/s3) for the Original Fork.
 
 After having a lot of impossible to debug problems with Amazon's Guzzle-based AWS SDK we decided to roll our own
 connector for Amazon S3. This is by no means a complete implementation, just a small subset of S3's features which are
@@ -77,7 +79,7 @@ $listing = $connector->getBucket('mybucket', 'path/to/list/');
 ```
 
 If you want to list "subdirectories" you need to do
- 
+
 ```php
 $listing = $connector->getBucket('mybucket', 'path/to/list/', null, null, '/', true);
 ```
@@ -89,21 +91,21 @@ The last parameter (common prefixes) controls the listing of "subdirectories"
 From a file:
 
 ```php
-$input = Input::createFromFile($sourceFile);   
+$input = Input::createFromFile($sourceFile);
 $connector->putObject($input, 'mybucket', 'path/to/myfile.txt');
 ```
 
 From a string:
 
 ```php
-$input = Input::createFromData($sourceString);   
+$input = Input::createFromData($sourceString);
 $connector->putObject($input, 'mybucket', 'path/to/myfile.txt');
 ```
 
 From a stream resource:
 
 ```php
-$input = Input::createFromResource($streamHandle, false);   
+$input = Input::createFromResource($streamHandle, false);
 $connector->putObject($input, 'mybucket', 'path/to/myfile.txt');
 ```
 
@@ -127,7 +129,7 @@ do
 	$input = Input::createFromFile($sourceFile);
 	$input->setUploadID($uploadId);
 	$input->setPartNumber(++$partNumber);
-	
+
 	$eTag = $connector->uploadMultipart($input, 'mybucket', 'mypath/movie.mov');
 
 	if (!is_null($eTag))
