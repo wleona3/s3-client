@@ -1,17 +1,11 @@
 <?php
 /**
- * Akeeba Engine
- * The modular PHP5 site backup engine
- *
  * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
  * @license   GNU GPL version 3 or, at your option, any later version
- * @package   akeebaengine
+ * @package   s3-client
  */
 
-namespace Akeeba\Engine\Postproc\Connector\S3v4\Exception;
-
-// Protection against direct access
-defined('AKEEBAENGINE') or die();
+namespace Keek\S3\Connector\Exception;
 
 use Exception;
 
@@ -20,14 +14,14 @@ use Exception;
  */
 class InvalidAccessKey extends ConfigurationError
 {
-	public function __construct($message = "", $code = 0, Exception $previous = null)
-	{
-		if (empty($message))
-		{
-			$message = 'The Amazon S3 Access Key provided is invalid';
-		}
+    public function __construct($message = "", $code = 0, Exception $previous = null)
+    {
+        if (empty($message))
+        {
+            $message = 'The Amazon S3 Access Key provided is invalid';
+        }
 
-		parent::__construct($message, $code, $previous);
-	}
+        parent::__construct($message, $code, $previous);
+    }
 
 }
