@@ -2,7 +2,7 @@
 
 A lightweight Amazon S3 connector implementation for PHP 5.3 or later
 
-**Special Thanks To: ** [akeeba/s3](https://github.com/akeeba/s3) for the Original Fork.
+**Special Thanks To:** [akeeba/s3](https://github.com/akeeba/s3) for the Original Fork.
 
 After having a lot of impossible to debug problems with Amazon's Guzzle-based AWS SDK we decided to roll our own
 connector for Amazon S3. This is by no means a complete implementation, just a small subset of S3's features which are
