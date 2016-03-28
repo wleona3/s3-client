@@ -68,7 +68,7 @@ abstract class Signature
      */
     public static function getSignatureObject(Request $request, $method = 'v2')
     {
-        $className = '\\Akeeba\\Engine\\Postproc\\Connector\\S3v4\\Signature\\' . ucfirst($method);
+        $className = '\\Keek\\S3\\Connector\\Signature\\' . ucfirst($method);
 
         return new $className($request);
     }

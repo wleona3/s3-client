@@ -96,7 +96,6 @@ class Request
 
     /**
      * The location of the CA certificate cache. It can be a file or a directory. If it's not specified, the location
-     * set in AKEEBA_CACERT_PEM will be used
      *
      * @var  string|null
      */
@@ -307,11 +306,6 @@ class Request
             return $this->caCertLocation;
         }
 
-        if (defined('AKEEBA_CACERT_PEM'))
-        {
-            return AKEEBA_CACERT_PEM;
-        }
-
         return null;
     }
 
@@ -370,7 +364,7 @@ class Request
 
         // Basic setup
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_USERAGENT, 'AkeebaBackupProfessional/S3PostProcessor');
+        curl_setopt($curl, CURLOPT_USERAGENT, 'keek/s3-client');
 
         if ($this->configuration->isSSL())
         {
