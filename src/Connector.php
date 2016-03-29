@@ -43,7 +43,7 @@ class Connector
      * @param   string  $acl             ACL constant, by default the object is private (visible only to the uploading user)
      * @param   array   $requestHeaders  Array of request headers
      *
-     * @return  void
+     * @return  int
      *
      * @throws  CannotPutFile  If the upload is not possible
      */
@@ -142,6 +142,8 @@ class Connector
                 sprintf(__METHOD__ . "(): [%s] %s\n\nDebug info:\n%s", $response->error->getCode(), $response->error->getMessage(), print_r($response->body, true))
             );
         }
+
+        return $response->getHeaders()['Content-Length'];
     }
 
     /**
