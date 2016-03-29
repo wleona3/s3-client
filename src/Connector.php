@@ -218,6 +218,44 @@ class Connector
     }
 
     /**
+     * HEAD an object
+     *
+     * @param   string  $bucket  Bucket name
+     * @param   string  $uri     Object URI
+     * @param   array   $headers Object Headers
+     *
+     * @return  boolean
+     * @throws  CannotOpenFileForWrite
+     * @throws  CannotGetFile
+     */
+    public function headObject($bucket, $uri, &$headers)
+    {
+        $request = new Request('HEAD', $bucket, $uri, $this->configuration);
+
+        $response = $request->getResponse();
+
+        if (!$response->error->isError() && (($response->code !== 200) && ($response->code !== 206)))
+        {
+            $response->error = new Error(
+                $response->code,
+                "Unexpected HTTP status {$response->code}"
+            ) ;
+        }
+
+        if ($response->error->isError())
+        {
+            throw new CannotGetFile(
+                sprintf(__METHOD__ . "({$bucket}, {$uri}): [%s] %s\n\nDebug info:\n%s",
+                    $response->error->getCode(), $response->error->getMessage(), print_r($response->body, true)),
+                $response->error->getCode()
+            );
+        }
+
+        $headers = $response->getHeaders();
+        return true;
+    }
+
+    /**
      * Delete an object
      *
      * @param   string  $bucket  Bucket name
