@@ -152,13 +152,14 @@ class Connector
      * @param   mixed   $saveTo  Filename or resource to write to
      * @param   int     $from    Start of the download range, null to download the entire object
      * @param   int     $to      End of the download range, null to download the entire object
+     * @param   array   $headers Object Headers
      *
      * @return  void|string  No return if $saveTo is specified; data as string otherwise
      *
      * @throws  CannotOpenFileForWrite
      * @throws  CannotGetFile
      */
-    public function getObject($bucket, $uri, $saveTo = false, $from = null, $to = null)
+    public function getObject($bucket, $uri, $saveTo = false, $from = null, $to = null, &$headers)
     {
         $request = new Request('GET', $bucket, $uri, $this->configuration);
 
@@ -185,7 +186,7 @@ class Connector
         }
 
         // Set the range header
-        if ((!empty($from) && !empty($to)) || (!is_null($from) && !empty($to)))
+        if (is_int($from) && $from >= 0 && (!$to || (is_int($to) && $to >= 1)))
         {
             $request->setHeader('Range', "bytes=$from-$to");
         }
@@ -208,6 +209,8 @@ class Connector
                 $response->error->getCode()
             );
         }
+
+        $headers = $response->getHeaders();
 
         if (!is_resource($fp))
         {
