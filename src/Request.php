@@ -560,6 +560,11 @@ class Request
             return $strlen;
         }
 
+        // Check if the Write output is a resource, if so write these headers out.
+        if (in_array($this->response->code, [200, 206]) && !is_null($this->fp) && is_resource($this->fp)) {
+            header($data);
+        }
+
         if (substr($data, 0, 4) == 'HTTP')
         {
             $this->response->code = (int)substr($data, 9, 3);
@@ -586,14 +591,9 @@ class Request
             case 'ETag':
                 $this->response->setHeader('hash', $value{0} == '"' ? substr($value, 1, -1) : $value);
                 break;
-
-            default:
-                if (preg_match('/^x-amz-meta-.*$/', $header))
-                {
-                    $this->setHeader($header, is_numeric($value) ? (int)$value : $value);
-                }
-                break;
         }
+
+        $this->setHeader($header, is_numeric($value) ? (int)$value : $value);
 
         return $strlen;
     }

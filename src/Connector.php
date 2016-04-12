@@ -188,7 +188,7 @@ class Connector
         }
 
         // Set the range header
-        if (is_int($from) && $from >= 0 && (!$to || (is_int($to) && $to >= 1)))
+        if (is_numeric($from) && $from >= 0 && (!$to || (is_numeric($to) && $to >= 1)))
         {
             $request->setHeader('Range', "bytes=$from-$to");
         }
