@@ -437,6 +437,15 @@ class Request
         curl_setopt($curl, CURLOPT_HEADERFUNCTION, array($this, '__responseHeaderCallback'));
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 
+        // Optimize the Object Store Request Caching
+        if (!in_array($this->verb, ['PUT', 'POST'])) {
+            curl_setopt($curl, CURLOPT_FRESH_CONNECT, false);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
+            // Disabled execution timeout to allow streaming to complete
+            //curl_setopt($curl, CURLOPT_TIMEOUT_MS, 8000);
+            curl_setopt($curl, CURLOPT_DNS_CACHE_TIMEOUT, 604800);
+        }
+
         // Request types
         switch ($this->verb)
         {
