@@ -344,12 +344,13 @@ class Request
         return $signer->getAuthenticatedURL($lifetime = null, $https = false);
     }
 
-    /**
-     * Get the S3 response
-     *
-     * @return  Response
-     */
-    public function getResponse()
+	/**
+	 * Get the S3 response
+	 *
+	 * @param int $timeout
+	 * @return Response
+	 */
+    public function getResponse($timeout = 5)
     {
         $this->processParametersIntoResource();
 
@@ -366,7 +367,7 @@ class Request
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_USERAGENT, 'keek/s3-client');
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 1);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
 
         if ($this->configuration->isSSL())
         {
@@ -441,8 +442,6 @@ class Request
         if (!in_array($this->verb, ['PUT', 'POST'])) {
             curl_setopt($curl, CURLOPT_FRESH_CONNECT, false);
             curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
-            // Disabled execution timeout to allow streaming to complete
-            //curl_setopt($curl, CURLOPT_TIMEOUT_MS, 8000);
             curl_setopt($curl, CURLOPT_DNS_CACHE_TIMEOUT, 604800);
         }
 

@@ -24,6 +24,11 @@ class Connector
      */
     private $configuration = null;
 
+	/**
+	 * @var int Curl timeout
+	 */
+    private $curlTimeout = 5;
+
     /**
      * Connector constructor.
      *
@@ -89,7 +94,7 @@ class Connector
 
         $request->setAmzHeader('x-amz-acl', $acl);
 
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if ($response->code !== 200)
         {
@@ -193,7 +198,7 @@ class Connector
             $request->setHeader('Range', "bytes=$from-$to");
         }
 
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if (!$response->error->isError() && (($response->code !== 200) && ($response->code !== 206)))
         {
@@ -237,7 +242,7 @@ class Connector
     {
         $request = new Request('HEAD', $bucket, $uri, $this->configuration);
 
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if (!$response->error->isError() && (($response->code !== 200) && ($response->code !== 206)))
         {
@@ -271,7 +276,7 @@ class Connector
     public function deleteObject($bucket, $uri)
     {
         $request = new Request('DELETE', $bucket, $uri, $this->configuration);
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if (!$response->error->isError() && ($response->code !== 204))
         {
@@ -371,7 +376,7 @@ class Connector
             $request->setParameter('delimiter', $delimiter);
         }
 
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if (!$response->error->isError() && $response->code !== 200)
         {
@@ -449,7 +454,7 @@ class Connector
 
                 try
                 {
-                    $response = $request->getResponse();
+                    $response = $request->getResponse($this->getRequestTimeout());
                 }
                 catch (\Exception $e)
                 {
@@ -504,7 +509,7 @@ class Connector
         $configuration->setRegion('us-east-1');
 
         $request = new Request('GET', '', '', $configuration);
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if (!$response->error->isError() && (($response->code !== 200)))
         {
@@ -601,7 +606,7 @@ class Connector
 
         $request->setHeader('Content-Type', $input->getType());
 
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if (!$response->error->isError() && ($response->code !== 200))
         {
@@ -735,7 +740,7 @@ class Connector
 
         $request->setHeader('Content-Length', $input->getSize());
 
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if ($response->code !== 200)
         {
@@ -840,7 +845,7 @@ class Connector
 
         // Do post
         $request->setHeader('Content-Type', 'application/xml'); // Even though the Amazon API doc doesn't mention it, it's required... :(
-        $response = $request->getResponse();
+        $response = $request->getResponse($this->getRequestTimeout());
 
         if (!$response->error->isError() && ($response->code != 200))
         {
@@ -872,4 +877,23 @@ class Connector
     {
         return $this->configuration;
     }
+
+	/**
+	 * @return int
+	 */
+	public function getRequestTimeout()
+	{
+		return $this->curlTimeout;
+	}
+
+	/**
+	 * @param int $curlTimeout
+	 * @return $this
+	 */
+	public function setCurlTimeout($curlTimeout)
+	{
+		$this->curlTimeout = $curlTimeout;
+
+		return $this;
+	}
 }
